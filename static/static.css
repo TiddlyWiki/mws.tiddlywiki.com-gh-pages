@@ -375,7 +375,7 @@ html button {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }html:-webkit-full-screen {
-	background-color: #f4f4f4;
+	background-color: #eddee7;
 }body.tc-body {
 	font-size: 14px;
 	line-height: 20px;
@@ -384,7 +384,7 @@ html button {
 
 
 	color: #333333;
-	background-color: #f4f4f4;
+	background-color: #eddee7;
 	fill: #333333;
 }/**
  * Correct the font size and margin on `h1` elements within `section` and
@@ -648,7 +648,7 @@ a.tc-tiddlylink:hover {
 	border-radius: 20px;
 }.tc-tiddler-dragger-cover {
 	position: absolute;
-	background-color: #f4f4f4;
+	background-color: #eddee7;
 }.tc-page-container > .tc-dropzone {
 	min-height: 100vh;
 }.tc-dropzone {
@@ -1708,13 +1708,13 @@ a.tc-tiddlylink:hover {
 }.tc-sidebar-lists .tc-tab-buttons {
 	margin-bottom: -1px;
 }.tc-sidebar-lists .tc-tab-buttons button.tc-tab-selected {
-	background-color: #f4f4f4;
+	background-color: #eddee7;
 	color: ;
 	border-left: 1px solid #d8d8d8;
 	border-top: 1px solid #d8d8d8;
 	border-right: 1px solid #d8d8d8;
 }.tc-sidebar-lists .tc-tab-buttons button {
-	background-color: #e0e0e0;
+	background-color: #c7b7bf;
 	color: #666666;
 	border-left: 1px solid #cccccc;
 	border-top: 1px solid #cccccc;
@@ -1724,14 +1724,14 @@ a.tc-tiddlylink:hover {
 }.tc-more-sidebar > .tc-tab-set > .tc-tab-buttons > button {
 	display: block;
 	width: 100%;
-	background-color: #e0e0e0;
+	background-color: #c7b7bf;
 	border-top: none;
 	border-left: none;
 	border-bottom: none;
 	border-right: 1px solid #ccc;
 	margin-bottom: inherit;
 }.tc-more-sidebar > .tc-tab-set > .tc-tab-buttons > button.tc-tab-selected {
-	background-color: #f4f4f4;
+	background-color: #eddee7;
 	border: none;
 }/*
 ** Manager
