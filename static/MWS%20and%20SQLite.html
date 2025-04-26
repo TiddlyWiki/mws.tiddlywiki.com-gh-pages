@@ -39,6 +39,17 @@
 <h1>Database Engines</h1>
 <p>SQLite is perfect for MWS because it doesn't require any extra setup. But MWS is not restricted to SQLite. It uses Prisma for the database access layer, which supports several other database engines, including MariaDB (the MySQL fork) and Postgres.
 </p>
+<h1>Better-SQLite3</h1>
+<p>Currently WAL mode is not enabled. It has plenty of advantages, and a few minor disadvantages, but mostly it just takes extra thought to use correctly. It has more advantages for high-traffic servers that need serious concurrency. Better-SQLite3 defaults to synchronous=NORMAL for WAL mode. Eventually we will probably add a setting to enable it.
+</p>
+<p>Better-SQLite3 supports multi-threading via Node workers. Either way we have to implement proper support for transactions, which mostly just means reserving a worker for the duration of the transaction.
+</p>
+<p>Better-SQLite3 has foriegn keys enabled by default.
+</p>
+<p>Better-SQLite3 uses native addons. If your platform isn't supported, or you need a wasm-only solution, feel free to <a class="tc-tiddlylink-external _codified_" href="https://github.com/TiddlyWiki/MultiWikiServer" rel="noopener noreferrer" target="_blank">open an issue on Github</a> sharing your use-case.
+</p>
+<p>MWS uses <a class="tc-tiddlylink-external _codified_" href="https://www.prisma.io" rel="noopener noreferrer" target="_blank">Prisma</a> to communicate with SQLite, and in theory, MWS should work with <a class="tc-tiddlylink-external _codified_" href="https://www.prisma.io/docs/orm/overview/databases" rel="noopener noreferrer" target="_blank">anything Prisma supports</a>.
+</p>
 </div></div>
 </div></p>
 </section>
