@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.7-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>HTTP API: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="HTTP API" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">HTTP API</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">28th April 2025 at 3:26pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:#333333;color:#333333;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>The MultiWikiServer HTTP API provides management and tiddler endpoints.
+</p>
+<p>The design goals of the API are:
+</p>
+<ul>
+<li>Connect the client and server as transparently as possible.</li>
+<li>Be easy to understand and use via Javascript.</li>
+<li>Have strict validation of incoming requests.</li>
+</ul>
+<h2>Management</h2>
+<ul>
+<li>On the client, most request paths are defined by a single adaptor function which accepts the input for the server and returns a promise which resolves to the server's parsed response.</li>
+<li>The server may throw a user error (or a string), which is expected to return to the client. It should give them an actionable understanding of what went wrong.</li>
+<li>The API essentially forwards a function call from the client to the server, using <code class="_codified_">fetch</code>. It expects a Javascript client, and is not intended to support form submissions directly.</li>
+</ul>
+<h2>Tiddler</h2>
+<p>The tiddler API was based on <a class="tc-tiddlylink-external _codified_" href="https://tank.peermore.com/tanks/tiddlyweb/HTTP%20API" rel="noopener noreferrer" target="_blank">the API of TiddlyWeb</a>, first developed in 2008 by Chris Dent, but is more oriented around JSON and Typescript. The concept of resources remains and in the future it will hopefully be adapted to serve static versions of tiddlers.
+</p>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+
