@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.7-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>2025-04-03 - Phases of Development: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Notes" data-tags="Notes" data-tiddler-title="2025-04-03 - Phases of Development" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">2025-04-03 - Phases of Development</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">7th May 2025 at 12:32pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Notes"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:#333333;color:#333333;"><span class="tc-tag-exists">Notes</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>Welcome to the MultiWikiServer wiki!
+</p>
+<h2>Phases of development</h2>
+<h3>Phase 1 is to get a fully working system that can be extended.</h3>
+<p>The features here should cover all of the core requirements.
+</p>
+<ul>
+<li>Database fully async and concurrent with transactions and row locking.</li>
+<li>Recipes and bags fully supported.
+<ul>
+<li>Support for both server-wide (wiki-like) and per-user (doc-like) recipes.</li>
+<li>Shadow bags to hold each user's drafts and customizations for server-wide or shared recipes.</li>
+<li>Possible integration of various tiddler namespace behaviors, like private <code class="_codified_">User:{username}</code> tiddlers.</li>
+<li>Option <em>on the server</em> for users to propose edits to existing tiddlers, probably by moving a tiddler to a different bag.</li>
+</ul>
+</li>
+<li>The concept of multiple users fully supported. Auth state has a userID property.</li>
+<li>Auth with username and password by default, but allowing custom integrations to be built that use third-party auth libraries or services. Several of us already have different ideas in mind, and we need to build all the required mechanisms in phase 1 in order to make sure we're properly supporting them, even if we don't actually support the third-party integrations themselves until phase 2.</li>
+<li>Multiple sessions editing the same wiki supported <em>by the server</em>, with revision mechanisms to prevent overwriting edits with an old version.</li>
+<li>Sharing read or write access with other users via invite links.</li>
+</ul>
+<h3>Phase 2 is to add all the other important features</h3>
+<ul>
+<li><a class="tc-tiddlylink-external _codified_" href="https://github.com/TiddlyWiki/MultiWikiServer/issues/1" rel="noopener noreferrer" target="_blank">Full integration with popular auth solutions.</a></li>
+<li><a class="tc-tiddlylink-external _codified_" href="https://github.com/TiddlyWiki/MultiWikiServer/wiki/User-Management-3" rel="noopener noreferrer" target="_blank">Full Identity &amp; Access Management support.</a></li>
+<li>Collaborative editing sessions.</li>
+</ul>
+<h2>How the server classes work together</h2>
+<p>This implements a server that abstracts the various HTTP protocols into a single request state object which it then hands out to the routes.
+</p>
+<ul>
+<li><strong>Streamer</strong> abstracts away the difference between HTTP/1.1 and HTTP/2 to allow both to be handled transparently.
+<ul>
+<li>Normalizes the request and response into a single class.</li>
+<li>Currently it doesn't support push streams, but we could change that.</li>
+</ul>
+</li>
+<li><strong>Listeners</strong> handle the server listener and send requests they recieve to the router.
+<ul>
+<li>ListenerHTTP: Sets up and handles HTTP requests using the http module.</li>
+<li>ListenerHTTPS: Sets up and handles HTTPS requests using the http2 module (with http1.1 support).</li>
+</ul>
+</li>
+<li><strong>Router</strong>: The main server instance. Handles route matching and sets up a state object for each request. It also instantiates subsystems.
+<ul>
+<li><strong>AuthState</strong> (subsystem): Contains all authentication logic and is called at various points in the request process. It may throw to abort the request.</li>
+</ul>
+</li>
+<li><strong>StateObject</strong>: Contains everything routes have access to, including a database connection. Subsystems may create their own state classes which take the StateObject as a constructor argument.</li>
+</ul>
+<h2>Thoughts on routing</h2>
+<p>Routing generally works well, but the current routes are all strictly path based. They mix various concerns into one module based on path similarities.
+</p>
+<p>I think it would be a lot more streamlined to separate the concerns into different sections. Each of those would operate as their own submodule.
+</p>
+<p>Why? Because this is how complicated permissions can get:
+</p>
+<ul>
+<li><strong>Auth</strong> determines who the user is.
+<ul>
+<li>Auth adapters that connect third-party auth services, with fields like profile pic, display name, email, etc.</li>
+<li>Auth strategies like session cookies or access tokens.</li>
+<li>Login and registration forms, email and phone interactions, etc.</li>
+</ul>
+</li>
+<li><strong>Users</strong> contains all the code for changing what the user is allowed to do.
+<ul>
+<li>List of users, with tabs for pending, roles, etc.</li>
+<li>Handle user registrations and initial setup.</li>
+<li>Manage sharing and collaboration permissions: <a class="tc-tiddlylink-external _codified_" href="https://github.com/Arlen22/TW5-MWS/wiki/Roles" rel="noopener noreferrer" target="_blank">Roles</a> (eventually)</li>
+</ul>
+</li>
+<li><strong>Recipes</strong> shows the user their available recipes and lets them create or modify.
+<ul>
+<li>(Phase 1): Users create their own recipes and bags and specify read/write permissions for those recipes and bags.</li>
+<li>(Phase 2): Admins can define scoped bags which are added to recipes based on the user's role.</li>
+</ul>
+</li>
+<li><strong>Wikis</strong> contains all the code that runs when accessing the wiki itself.
+<ul>
+<li>Tiddler saving and loading based on the recipe instructions.</li>
+<li>Uploads and other third-party integrations requiring server support.</li>
+</ul>
+</li>
+</ul>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+

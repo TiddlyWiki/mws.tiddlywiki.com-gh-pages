@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.7-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>2025-02-18 - User Management: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Notes" data-tags="Notes" data-tiddler-title="2025-02-18 - User Management" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">2025-02-18 - User Management</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">7th May 2025 at 12:31pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Notes"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:#333333;color:#333333;"><span class="tc-tag-exists">Notes</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>Described here is a full blown role-based identity &amp; access management system. However we are unlikely to need this level of sophistication immediately.
+</p>
+<h2>Logical groupings and definitions</h2>
+<ul>
+<li>A user is a logical grouping of logins.</li>
+<li>An organization ("content space") is a logical grouping of users and the content they interact with.</li>
+<li>The organization owner is a user who sets the privileges other users have in the organization.
+<ul>
+<li>If enabled, every user is the owner of their own personal organization.</li>
+<li>If enabled, they may own extra organizations.</li>
+<li>The organization owner has all privileges in the organization except those they explicitly deny themself.</li>
+<li>They cannot deny themself the ability to change privileges in the organization.</li>
+<li>They may delegate to managers.</li>
+</ul>
+</li>
+<li>Admins are users with site-wide privileges.
+<ul>
+<li>The admin role is separate from the owner role. They are not site-wide owners.</li>
+<li>Admins can take various actions on extra orginizations, depending on site settings.</li>
+<li>Admins can manage users access to the site and take related actions.</li>
+<li>Depending on settings, admins cannot view content that does not belong to them, unless shared (the exact privacy details here aren't important, it's the technical features that I'm including this for).</li>
+</ul>
+</li>
+<li>Site admins can define a public content space which everyone can view, and an additional content space which authenticated users can view. These act as implicit organizations with admins given permissions as managers.</li>
+</ul>
+<p>Even though it sounds like I'm expecting this to be some kind of public document sharing platform or online collaboration, the setup actually has multiple use-cases within a single organization that are just as complicated.
+</p>
+<h3>To recap the various roles in an organization</h3>
+<ul>
+<li><strong>admin</strong> - Granted site-wide permissions.</li>
+<li><strong>owner</strong> - Granted organization level permissions.</li>
+<li><strong>manager</strong> - Delegated permission from owners.</li>
+<li><strong>user</strong> - Explicitly invited and added to the organization user list by owners or managers.</li>
+<li><strong>auth</strong> - Visitor signed in and not in the user list.</li>
+<li><strong>anon</strong> - Visitor not signed into the site.</li>
+</ul>
+<h3>There are two permission levels within the wiki</h3>
+<ul>
+<li><strong>writer</strong> - can edit tiddlers, optionally filtered</li>
+<li><strong>reader</strong> - can view tiddlers, optionally filtered</li>
+</ul>
+<p>Owners can create permission profiles which define reader and writer filters, then assign them to users or groups (or to their access to a specific wiki), and when they update the permission profile the changes apply everywhere.
+</p>
+<p>I mean look, at some point I'm just implementing an entire Identity Access Management service.
+</p>
+<h2>JSON settings file</h2>
+<p>A short list of options in a JSON file alongside the database (or with the database settings) which determines some permanent settings that depend on the use case.
+</p>
+<ul>
+<li>Whether admins can change user email address or oauth identity and set user passwords (account takeover).</li>
+<li>Whether admins can view site content unrestricted (account privacy).</li>
+<li>Sets the max visibility owners and admins can set (since that shouldn't need to change).</li>
+<li>The default default visibility (before orgs change it).</li>
+</ul>
+<h3>settings for content spaces (organizations)</h3>
+<ul>
+<li>Whether new users get their own personal content space (personal organization).</li>
+<li>Whether non-admin users can be given additional content spaces (extra organizations).</li>
+<li>Whether non-admin users can create their own additional content spaces (extra organizations).</li>
+<li>Whether additional content spaces created by non-admin users can be removed from them by admins (this will depend on the use case).</li>
+</ul>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+
