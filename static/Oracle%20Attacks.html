@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.7-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>Oracle Attacks: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://mws.tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://mws.tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Security" data-tags="Security" data-tiddler-title="Oracle Attacks" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Oracle Attacks</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">25th May 2025 at 5:37pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Security"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Security</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>Oracles are clues that give information about a response without revealing the actual response.
+</p>
+<p>Obviously none of this matters if your data isn't encrypted with HTTPS, since it's all open for everyone to read. But if it's encrypted, there are still ways of determining content.
+</p>
+<h2>Compression Oracles</h2>
+<p>A compression oracle is when an attack takes advantage of the deduplication that compression attempts to do by somehow managing to get their own plaintext inserted into the compression stream and then checking whether the compressed output increases in size or not. If it doesn't, then obviously that particularly plaintext was already in the response for that request.
+</p>
+<h2>Length Oracle</h2>
+<p>A similar attack involves inspecting the request length to determine whether a request returned any results. This is especially true of search features. A very big response implies returned results and a very tiny response implies no results. But there are also other ways to use the length which can come down to determining the exact number of bytes returned.
+</p>
+<h3>Mitigations for normal oracles</h3>
+<p>The attacks are usually done based on the timing of the response, so even if the response itself is opaque, the timing can usually still be inferred.
+</p>
+<ul>
+<li>Disable compression (ultimate mitigation but there are better solutions)</li>
+<li>Disable third-party cookies (SameSite=strict) so cookies are only sent for requests that originate from a loaded webpage. However, this prevents the cookie from being sent to the initial page load.</li>
+<li>We could set two cookies and only enable compression if the cookie with SameSite=strict is present. Any code which can make a SameSite=strict request is normally considered privelaged code anyway, so we have bigger problems if an attacker can do that.</li>
+</ul>
+<h2>MWS-specific oracles</h2>
+<p>A cross-bag compression oracle would allow an attacker with write access in one bag to infer the contents of a different bag in the recipe which they do not have access to by somehow attacking someone who does have access to that recipe and watching how the browser compresses various things. Without directly reading the bag's contents, they can write to the bag they have access to and watch the responses being sent to the other user to infer the contents of the recipe overall.
+</p>
+<p>If batching is enabled, and if updates have side effects which trigger a save which is then loaded by other browsers, and if the attacker manages to add a second save with the correct timing to load in the same batch as the update of the side effect, an oracle attack can occur.
+</p>
+<h2>MWS mitigations</h2>
+<ul>
+<li>The simplest mitigation is to never compress the contents of two bags together.</li>
+</ul>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+

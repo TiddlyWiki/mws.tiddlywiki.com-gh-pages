@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.7-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>Request Handling: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://mws.tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://mws.tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Request Handling" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Request Handling</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">1st June 2025 at 10:09am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>The Router class has the following methods which constitute the request chain.
+</p>
+<h2><code class="_codified_">handle</code></h2>
+<p>Takes the incoming request, response, and listener options, and calls the <code class="_codified_">handleRequest</code> function, adding a catch handler for rejected promises. This is the start of the async request chain. Any rejected promise from here on will make it's way back here if not caught anywhere else. If the Error is the <code class="_codified_">STREAM_ENDED</code> symbol, the handler simply ignores it, which is an easy way to signal that the request was handled and halt further processing.
+</p>
+<p>The <code class="_codified_">STREAM_ENDED</code> symbol is usually used by returning or throwing the result of <code class="_codified_">state.send*</code> methods, which have code equivalent to the following.
+</p>
+<pre><code>class State {
+  sendEmpty(status, headers){
+    this.res.writeHead(status, headers);
+    return this.end();
+  }
+  end(){
+    this.res.end();
+    return STREAM_ENDED;
+  }
+}
+</code></pre>
+<h2><code class="_codified_">handleRequest</code></h2>
+<p>Calls connect-style middleware for all requests
+</p>
+<ul>
+<li>helmet</li>
+</ul>
+<p>Creates the streamer
+</p>
+<p>Calls <code class="_codified_">handleStreamer</code>, adding a catch handler with <code class="_codified_">streamer.catcher</code>
+</p>
+<h2><code class="_codified_">new Streamer</code></h2>
+<p>The streamer hides the difference between HTTP/1.1 and HTTP/2.
+</p>
+<ul>
+<li>Parse the URL and request headers.</li>
+<li>If this listener has a path prefix, remove it from the URL.</li>
+<li>set the host header from the <code class="_codified_">:authority</code> header if HTTP/2.</li>
+<li>Parse cookies</li>
+<li>Setup the compression stream. This is modified from the compression package and returns a compression stream or a PassThrough stream if no compression is used, instead of modifying the response object. It determines the compression to use based on <code class="_codified_">accept-encoding</code>, but if a <code class="_codified_">content-encoding</code> header is already set it just passes the response through, assuming it is already in the desired encoding.</li>
+</ul>
+<h2><code class="_codified_">handleStreamer</code></h2>
+<ul>
+<li>Enforce the <code class="_codified_">x-requested-with</code> header if the request isn't a GET, HEAD, or OPTIONS request.</li>
+<li>Gets the auth details from the session manager</li>
+<li>Calculates the route for this request. Think of the route as the path through the tree of route handlers. Each handler may have child routes which get called after it. Each level in the tree can handle the request entirely or defer to child routes. If any level sends headers, the child level will not be called.</li>
+<li>Receives the body in the format specified by the route</li>
+<li>Calls <code class="_codified_">handleRoute</code></li>
+</ul>
+<h2><code class="_codified_">handleRoute</code></h2>
+<p>Awaits each handler in the route in turn, returning if one of them sends headers.
+</p>
+<p>If none of them sent headers, send a 404 response.
+</p>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+
