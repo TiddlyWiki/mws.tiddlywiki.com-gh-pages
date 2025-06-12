@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.7-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>Route Definers: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://mws.tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://mws.tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Route Definers" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Route Definers</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th May 2025 at 11:13pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<h2>Basic Route Definer</h2>
+<p>The original route definer which I used to type TiddlyWiki server routes, but the types ended up being extremely complicated for what I actually ended up needing.  It is still used internally to actually define the routes, but the JavaScript side of it is very simple.
+</p>
+<dl>
+<dt><code class="_codified_">method</code></dt>
+<dd>A subset of the <a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="Allowed%2520Methods.html">Allowed Methods</a>.</dd>
+<dt><code class="_codified_">path</code></dt>
+<dd>A regex starting with <code class="_codified_">^/</code> which matches the request. The first route handler which matches is used. Routes may be nested, and the full match is removed from the URL before matching children. If a parent route matches, it will be called, even if it has no child matches.</dd>
+<dt><code class="_codified_">denyFinal</code></dt>
+<dd>If this route matches, but none of its children do, the server will return <code class="_codified_">404 NOT FOUND</code>. Otherwise, its state handler will be called and expected to handle the request, even if none of its children match.</dd>
+<dt><code class="_codified_">pathParams</code></dt>
+<dd>An array of key names for regex match groups for the pathParams object.</dd>
+<dt><code class="_codified_">bodyFormat</code></dt>
+<dd>The <a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="Body%2520Format.html">Body Format</a> which the request wishes to receive. If the method is only GET and HEAD, this is ignored, as no request body is expected. Internally, the request is probably drained early, just in case a body was sent.</dd>
+<dt><code class="_codified_">handler</code> - a separate callback argument</dt>
+<dd>If the route matches, the handler is called. The handler is called at each level in order, so parents may add additional (out of type) properties to the state object or handle some requests and allow others to go through to the matched child.</dd>
+</dl>
+<h3>Match result</h3>
+<p>The StateObject has a routePath parameter containing the "path" through the "tree" of route definitions. In other words, it has the first matched route, and then the first matched child of that route, and then the first matched child of that route, and so on.
+</p>
+<p>It is an array of objects with the following properties.
+</p>
+<dl>
+<dt><code class="_codified_">route</code></dt>
+<dd>an object containing the options for the route listed above</dd>
+<dt><code class="_codified_">params</code></dt>
+<dd>an array of the match groups (<code class="_codified_">match.slice(1)</code>)</dd>
+<dt><code class="_codified_">remainingPath</code></dt>
+<dd>The remaining URL to match (if this is zero-length, it will be a <code class="_codified_">/</code>)</dd>
+</dl>
+<h2>Zod Route Definers</h2>
+<p>The rest of the route definers are used by creating a class with the route definitions as properties, and then calling that class on server startup to register the routes.
+</p>
+<div style="color:rgb(212, 212, 212);background-color:rgb(30, 30, 30);font-family:&quot;font-size:15px;line-height:20px;white-space:pre;"><div><span style="color:#569cd6;">class</span> <span style="color:#4ec9b0;">RoutesClass</span> { <span style="color:#9cdcfe;">test</span> = <span style="color:#dcdcaa;">zodManage</span>(<span style="color:#9cdcfe;">z</span> <span style="color:#569cd6;">=&gt;</span> <span style="color:#9cdcfe;">z</span>.<span style="color:#dcdcaa;">any</span>(), <span style="color:#569cd6;">async</span> <span style="color:#9cdcfe;">e</span> <span style="color:#569cd6;">=&gt;</span> <span style="color:#569cd6;">null</span>) }</div><div><span style="color:#569cd6;">const</span> <span style="color:#4fc1ff;">RoutesKeyMap</span>: <span style="color:#4ec9b0;">RouterKeyMap</span>&lt;<span style="color:#4ec9b0;">RoutesClass</span>, <span style="color:#4ec9b0;">true</span>&gt; = { <span style="color:#9cdcfe;">test</span><span style="color:#9cdcfe;">:</span> <span style="color:#569cd6;">true</span> }</div><div><span style="color:#dcdcaa;">registerZodRoutes</span>(<span style="color:#4fc1ff;">root</span>, <span style="color:#569cd6;">new</span> <span style="color:#4ec9b0;">RoutesClass</span>(), <span style="color:#4ec9b0;">Object</span>.<span style="color:#dcdcaa;">keys</span>(<span style="color:#4fc1ff;">RoutesKeyMap</span>));</div></div>
+<p><code class="_codified_">RoutesKeyMap</code> would have the keys of all the routes in the class, and the type makes sure no routes have been missed, while also allowing the class to have extra properties that are not routes.
+</p>
+<h2><code class="_codified_">zodRoute</code></h2>
+<dl>
+<dt><code class="_codified_">method</code></dt>
+<dd>A subset of the <a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="Allowed%2520Methods.html">Allowed Methods</a>.</dd>
+<dt><code class="_codified_">path</code></dt>
+<dd>A slash-separated string of folders including variables prefixed with a <code class="_codified_">:</code></dd>
+<dd><code class="_codified_">"path/to/route/:var/route/:var2"</code></dd>
+<dt><code class="_codified_">zodPathParams</code> - zod check on <code class="_codified_">state.pathParams</code></dt>
+<dd>A <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="Zod%2520Callback.html">Zod Callback</a> which returns an object with keys the same as the <code class="_codified_">path</code> variables, and values being the zod check for that specific variable. If this fails, the server will return a <code class="_codified_">404 NOT FOUND</code> response.</dd>
+<dt><code class="_codified_">bodyFormat</code></dt>
+<dd>The body format which the request wishes to receive. If the method is only GET and HEAD, this is ignored, as no request body is expected.</dd>
+<dt><code class="_codified_">zodRequest</code> - zod check on <code class="_codified_">state.data</code></dt>
+<dd>A <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="Zod%2520Callback.html">Zod Callback</a> which returns the expected shape of the request body after it is done being parsed. If this fails, the server will return a <code class="_codified_">400 INVALID</code> response.</dd>
+<dt><code class="_codified_">inner</code></dt>
+<dd>The handler, which receives a <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="StateObject.html">StateObject</a> instance with the generics set according to the above parameters. See also <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="ZodAssert.html">ZodAssert</a></dd>
+</dl>
+<h2><code class="_codified_">zodManage</code></h2>
+<p><code class="_codified_">zodManage</code> is a shortcut for a specific use case of <code class="_codified_">zodRoute</code> which is used for the admin UI.
+</p>
+<div style="color:rgb(212, 212, 212);background-color:rgb(30, 30, 30);font-family:&quot;font-size:15px;line-height:20px;white-space:pre;"><div>  <span style="color:#dcdcaa;">zodRoute</span>(</div><div>    [<span style="color:#ce9178;">"POST"</span>],</div><div>    <span style="color:#ce9178;">"/manager/$key"</span>,</div><div>    <span style="color:#9cdcfe;">z</span> <span style="color:#569cd6;">=&gt;</span> ({}),</div><div>    <span style="color:#ce9178;">"json"</span>,</div><div>    <span style="color:#dcdcaa;">zodRequest</span>,</div><div>    <span style="color:#569cd6;">async</span> <span style="color:#9cdcfe;">state</span> <span style="color:#569cd6;">=&gt;</span> {</div><div>      <span style="color:#c586c0;">return</span> <span style="color:#9cdcfe;">state</span>.<span style="color:#dcdcaa;">$transaction</span>(<span style="color:#569cd6;">async</span> (<span style="color:#9cdcfe;">prisma</span>) <span style="color:#569cd6;">=&gt;</span> <span style="color:#c586c0;">await</span> <span style="color:#dcdcaa;">inner</span>(<span style="color:#9cdcfe;">state</span>, <span style="color:#9cdcfe;">prisma</span>));</div><div>    }</div><div>  );</div></div>
+<p><code class="_codified_">$key</code> is a shortcut that refers to the key of the class the route is registered on. It is not a path param, so <code class="_codified_">zodPathParams</code> is empty.
+</p>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+
