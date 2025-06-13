@@ -17,123 +17,34 @@
 <p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://mws.tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://mws.tiddlywiki.com/</a></div></div>
 </p>
 <section class="tc-story-river tc-static-story-river">
-<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Application Access &amp; Security" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Application Access &amp; Security</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">28th April 2025 at 3:26pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<p>Users can be administered through two interfaces:
-</p>
-<ol>
-<li>Web-based Administrative Interface
-<ul>
-<li>Accessible to all users.</li>
-<li>Provides graphical interface for user operations</li>
-<li>Real-time validation and feedback</li>
-</ul>
-</li>
-<li>Command-line Interface (CLI) Tools
-<ul>
-<li>Only available to server owner.</li>
-<li>Suitable for automation and scripting</li>
-<li>Enables batch operations</li>
-<li>Useful for system initialization</li>
-</ul>
-</li>
-</ol>
-<p>Each user account contains the following essential components:
-</p>
-<ul>
-<li><strong>Username</strong>
-<ul>
-<li>Must be unique across the system</li>
-<li>Case-sensitive</li>
-<li>Used for authentication and audit trails</li>
-</ul>
-</li>
-<li><strong>Password</strong>
-<ul>
-<li>Stored using secure hashing algorithms</li>
-<li>Never stored in plaintext</li>
-<li>Subject to complexity requirements</li>
-</ul>
-</li>
-<li><strong>Email</strong>
-<ul>
-<li>Eventually used for the obvious password reset.</li>
-</ul>
-</li>
-<li><strong>Role Assignments</strong>
-<ul>
-<li>Multiple roles can be assigned</li>
-<li>Inherited permissions from all assigned roles</li>
-<li>Dynamic permission calculation based on role combination</li>
-</ul>
-</li>
-</ul>
-<h2>Access Levels</h2>
-<p>Conceptually, there are 6 access levels.
-</p>
-<ul>
-<li><strong>Site owner</strong> - has file system access to the server, and can run CLI commands. Presumably they also have a site admin account.</li>
-<li><strong>Site admin</strong> - Users with the admin <em>role</em>. They can assign owners and change permissions, and have full read and write access. Most ACL checks are skipped for the admin role.</li>
-<li><strong>Entity owner</strong> - Users who "own" an entity (bag or recipe). They can change permissions for that entity, and have full read and write access. <em>Entity admins</em> cannot change the owner.</li>
-<li><strong>Entity admin</strong> - Users granted the admin <em>permission</em> on an entity. They cannot change the owner, but they can change the permissions of other users for that entity.</li>
-<li><strong>Entity write</strong> - Users granted the write <em>permission</em> on an enitity. They can list, read, create, update, and delete tiddlers, but cannot change permissions.</li>
-<li><strong>Entity read</strong> - Users granted the read <em>permission</em> on an entity. They can list and read tiddlers, but cannot do anything else.</li>
-</ul>
-<h2>Entities</h2>
-<ul>
-<li><strong>Bag</strong> - A collection of tiddlers with unique titles</li>
-<li><strong>Recipe</strong> - A stack of bags in a specific order. Bags may inherit the ACL of a recipe they are included in.</li>
-</ul>
-<h2>Roles</h2>
-<ul>
-<li>Roles have names and descriptions</li>
-<li>Multiple users can be assigned to a role</li>
-</ul>
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Application Access &amp; Security" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Application Access &amp; Security</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 12:19am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
 <h2>Permissions</h2>
 <ul>
 <li><strong>READ</strong> - Read tiddlers from an entity.</li>
 <li><strong>WRITE</strong> - Write tiddlers to an entity.</li>
 <li><strong>ADMIN</strong> - Update ACL for an entity.</li>
 </ul>
-<h2>Admin</h2>
+<h2>Entities</h2>
 <ul>
-<li>There is an admin <em>role</em> and an admin <em>permission</em>.</li>
-<li>Roles are given specific permissions for specific entities (bags and recipes).</li>
-<li>The admin <em>role</em> has automatic admin <em>permission</em> for everything.</li>
+<li><strong>Bag</strong> - A collection of tiddlers with unique titles</li>
+<li><strong>Recipe</strong> - A stack of bags in a specific order. Bags may inherit the ACL of a recipe they are included in.</li>
 </ul>
-<h2>ACL</h2>
+<h2>Roles (aka Groups)</h2>
 <ul>
-<li>Grants the <strong>Permission</strong> for an <strong>Entity</strong> to a <strong>Role</strong>.</li>
-<li>Entities without an ACL are either public or private (configurable).</li>
+<li>Roles have names and descriptions</li>
+<li>Multiple users can be assigned to a role</li>
+<li>Roles are given <em>permissions</em> on <em>entities</em></li>
 </ul>
-<h2>Ownership</h2>
+<h2>Access Levels</h2>
+<p>Conceptually, there are 6 access levels.
+</p>
 <ul>
-<li>Ownership of an entity grants the "admin" <em>permission</em>.</li>
-<li>Only site admins can change the owner of an entity.</li>
-<li>Users with "admin" <em>permission</em> <strong>cannot</strong> change ownership.</li>
-</ul>
-<h2>User Types</h2>
-<h4>Administrator (ADMIN) Role</h4>
-<ul>
-<li>Full system access and configuration rights</li>
-<li>Most access checks are skipped</li>
-<li>Can create, modify, and delete user accounts</li>
-<li>Manages role assignments and permissions</li>
-<li>Has full permissions on all recipes and bags</li>
-</ul>
-<h4>Regular Users</h4>
-<ul>
-<li>Created by administrators</li>
-<li>Permissions determined by assigned roles</li>
-<li>Access limited to specific recipes based on role permissions</li>
-<li>Access to recipes without an ACL is based on recipe config</li>
-</ul>
-<h4>Guest Users</h4>
-<ul>
-<li>Users not logged in.</li>
-<li>No inherent permissions</li>
-<li>Can access recipes which allow it</li>
-<li>Read/write can be enabled by server config</li>
-<li>Useful for public wikis or documentation sites</li>
+<li><strong>Site owner</strong> - has file system access to the server, and can run CLI commands. Presumably they also have a site admin account and they can always create one via the CLI.</li>
+<li><strong>Site admin</strong> - Users with the admin <em>role</em>. They can assign owners and change permissions, and have full read and write access.</li>
+<li><strong>Entity owner</strong> - Owner of an entity (bag or recipe). They can change permissions for that entity, and have full read and write access.</li>
+<li><strong>Entity admin</strong> - Granted admin <em>permission</em>, they can manage permissions for the entity.</li>
+<li><strong>Entity write</strong> - Granted write <em>permission</em>, they can list, read, create, update, and delete tiddlers, but cannot change permissions.</li>
+<li><strong>Entity read</strong> - Granted read <em>permission</em> on an entity. They can list and read tiddlers, but cannot do anything else.</li>
 </ul>
 </div></div>
 </div></p>

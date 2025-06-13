@@ -2806,7 +2806,7 @@ type: text/css
   /* --------------------------------------------------------------------- */
   --code-background: var(--color-grey-100);
   --code-border: var(--color-grey-300);
-  --code-foreground: var(--color-error);
+  --code-foreground: var(--foreground);
   --pre-background: var(--code-background);
   --pre-border: var(--code-border);
 
@@ -3428,128 +3428,39 @@ html body.tc-body .tc-btn-rounded svg {
 <div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists " data-tags="" data-tiddler-title="Allowed Methods" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Allowed Methods</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th May 2025 at 10:27pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p><code>OPTIONS, GET, HEAD, POST, PUT, DELETE</code></p><p>HTTP allows any methods so I have no idea why I should only allow these. We could really go all out. </p></div>
 </div>
 </a><a name="Application Access &amp; Security">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Application Access &amp; Security" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Application Access &amp; Security</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">28th April 2025 at 3:26pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<p>Users can be administered through two interfaces:
-</p>
-<ol>
-<li>Web-based Administrative Interface
-<ul>
-<li>Accessible to all users.</li>
-<li>Provides graphical interface for user operations</li>
-<li>Real-time validation and feedback</li>
-</ul>
-</li>
-<li>Command-line Interface (CLI) Tools
-<ul>
-<li>Only available to server owner.</li>
-<li>Suitable for automation and scripting</li>
-<li>Enables batch operations</li>
-<li>Useful for system initialization</li>
-</ul>
-</li>
-</ol>
-<p>Each user account contains the following essential components:
-</p>
-<ul>
-<li><strong>Username</strong>
-<ul>
-<li>Must be unique across the system</li>
-<li>Case-sensitive</li>
-<li>Used for authentication and audit trails</li>
-</ul>
-</li>
-<li><strong>Password</strong>
-<ul>
-<li>Stored using secure hashing algorithms</li>
-<li>Never stored in plaintext</li>
-<li>Subject to complexity requirements</li>
-</ul>
-</li>
-<li><strong>Email</strong>
-<ul>
-<li>Eventually used for the obvious password reset.</li>
-</ul>
-</li>
-<li><strong>Role Assignments</strong>
-<ul>
-<li>Multiple roles can be assigned</li>
-<li>Inherited permissions from all assigned roles</li>
-<li>Dynamic permission calculation based on role combination</li>
-</ul>
-</li>
-</ul>
-<h2>Access Levels</h2>
-<p>Conceptually, there are 6 access levels.
-</p>
-<ul>
-<li><strong>Site owner</strong> - has file system access to the server, and can run CLI commands. Presumably they also have a site admin account.</li>
-<li><strong>Site admin</strong> - Users with the admin <em>role</em>. They can assign owners and change permissions, and have full read and write access. Most ACL checks are skipped for the admin role.</li>
-<li><strong>Entity owner</strong> - Users who "own" an entity (bag or recipe). They can change permissions for that entity, and have full read and write access. <em>Entity admins</em> cannot change the owner.</li>
-<li><strong>Entity admin</strong> - Users granted the admin <em>permission</em> on an entity. They cannot change the owner, but they can change the permissions of other users for that entity.</li>
-<li><strong>Entity write</strong> - Users granted the write <em>permission</em> on an enitity. They can list, read, create, update, and delete tiddlers, but cannot change permissions.</li>
-<li><strong>Entity read</strong> - Users granted the read <em>permission</em> on an entity. They can list and read tiddlers, but cannot do anything else.</li>
-</ul>
-<h2>Entities</h2>
-<ul>
-<li><strong>Bag</strong> - A collection of tiddlers with unique titles</li>
-<li><strong>Recipe</strong> - A stack of bags in a specific order. Bags may inherit the ACL of a recipe they are included in.</li>
-</ul>
-<h2>Roles</h2>
-<ul>
-<li>Roles have names and descriptions</li>
-<li>Multiple users can be assigned to a role</li>
-</ul>
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Application Access &amp; Security" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Application Access &amp; Security</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 12:19am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
 <h2>Permissions</h2>
 <ul>
 <li><strong>READ</strong> - Read tiddlers from an entity.</li>
 <li><strong>WRITE</strong> - Write tiddlers to an entity.</li>
 <li><strong>ADMIN</strong> - Update ACL for an entity.</li>
 </ul>
-<h2>Admin</h2>
+<h2>Entities</h2>
 <ul>
-<li>There is an admin <em>role</em> and an admin <em>permission</em>.</li>
-<li>Roles are given specific permissions for specific entities (bags and recipes).</li>
-<li>The admin <em>role</em> has automatic admin <em>permission</em> for everything.</li>
+<li><strong>Bag</strong> - A collection of tiddlers with unique titles</li>
+<li><strong>Recipe</strong> - A stack of bags in a specific order. Bags may inherit the ACL of a recipe they are included in.</li>
 </ul>
-<h2>ACL</h2>
+<h2>Roles (aka Groups)</h2>
 <ul>
-<li>Grants the <strong>Permission</strong> for an <strong>Entity</strong> to a <strong>Role</strong>.</li>
-<li>Entities without an ACL are either public or private (configurable).</li>
+<li>Roles have names and descriptions</li>
+<li>Multiple users can be assigned to a role</li>
+<li>Roles are given <em>permissions</em> on <em>entities</em></li>
 </ul>
-<h2>Ownership</h2>
+<h2>Access Levels</h2>
+<p>Conceptually, there are 6 access levels.
+</p>
 <ul>
-<li>Ownership of an entity grants the "admin" <em>permission</em>.</li>
-<li>Only site admins can change the owner of an entity.</li>
-<li>Users with "admin" <em>permission</em> <strong>cannot</strong> change ownership.</li>
-</ul>
-<h2>User Types</h2>
-<h4>Administrator (ADMIN) Role</h4>
-<ul>
-<li>Full system access and configuration rights</li>
-<li>Most access checks are skipped</li>
-<li>Can create, modify, and delete user accounts</li>
-<li>Manages role assignments and permissions</li>
-<li>Has full permissions on all recipes and bags</li>
-</ul>
-<h4>Regular Users</h4>
-<ul>
-<li>Created by administrators</li>
-<li>Permissions determined by assigned roles</li>
-<li>Access limited to specific recipes based on role permissions</li>
-<li>Access to recipes without an ACL is based on recipe config</li>
-</ul>
-<h4>Guest Users</h4>
-<ul>
-<li>Users not logged in.</li>
-<li>No inherent permissions</li>
-<li>Can access recipes which allow it</li>
-<li>Read/write can be enabled by server config</li>
-<li>Useful for public wikis or documentation sites</li>
+<li><strong>Site owner</strong> - has file system access to the server, and can run CLI commands. Presumably they also have a site admin account and they can always create one via the CLI.</li>
+<li><strong>Site admin</strong> - Users with the admin <em>role</em>. They can assign owners and change permissions, and have full read and write access.</li>
+<li><strong>Entity owner</strong> - Owner of an entity (bag or recipe). They can change permissions for that entity, and have full read and write access.</li>
+<li><strong>Entity admin</strong> - Granted admin <em>permission</em>, they can manage permissions for the entity.</li>
+<li><strong>Entity write</strong> - Granted write <em>permission</em>, they can list, read, create, update, and delete tiddlers, but cannot change permissions.</li>
+<li><strong>Entity read</strong> - Granted read <em>permission</em> on an entity. They can list and read tiddlers, but cannot do anything else.</li>
 </ul>
 </div></div>
 </div>
 </a><a name="Architecture">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-TableOfContents" data-tags="TableOfContents" data-tiddler-title="Architecture" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Architecture</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">12th June 2025 at 5:04pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="TableOfContents"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">TableOfContents</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p><ol class="tc-toc"><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Access%20Control"><span class="tc-toc-caption tc-tiny-gap-left">Access Control</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Client%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Client Plugins</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Moduler%20Design"><span class="tc-toc-caption tc-tiny-gap-left">Moduler Design</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#MWS%20and%20SQLite"><span class="tc-toc-caption tc-tiny-gap-left">MWS and SQLite</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Request%20Handling"><span class="tc-toc-caption tc-tiny-gap-left">Request Handling</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Request%20Server"><span class="tc-toc-caption tc-tiny-gap-left">Request Server</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Server%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Server Plugins</span></a><ol class="tc-toc"></ol></li></ol></p></div>
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-TableOfContents" data-tags="TableOfContents" data-tiddler-title="Architecture" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Architecture</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">12th June 2025 at 5:04pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="TableOfContents"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">TableOfContents</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p><ol class="tc-toc"><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Access%20Control"><span class="tc-toc-caption tc-tiny-gap-left">Access Control</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Client%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Client Plugins</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#MWS%20and%20SQLite"><span class="tc-toc-caption tc-tiny-gap-left">MWS and SQLite</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Request%20Handling"><span class="tc-toc-caption tc-tiny-gap-left">Request Handling</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Server%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Server Plugins</span></a><ol class="tc-toc"></ol></li></ol></p></div>
 </div>
 </a><a name="Bags and Recipes">
 <div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists " data-tags="" data-tiddler-title="Bags and Recipes" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Bags and Recipes</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">9th March 2024 at 2:21pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p>The bags and recipes model is a reference architecture for how tiddlers can be shared between multiple wikis. It was first introduced by TiddlyWeb in 2008.</p><p>The principles of bags and recipes can be simply stated:</p><ol><li>Tiddlers are stored in named "bags"</li><li>Bags have access controls that determines which users can read or write to them</li><li>Recipes are named lists of bags, ordered from lowest priority to highest</li><li>The tiddlers within a recipe are accumulated in turn from each bag in the recipe in order of increasing priority. Thus, if there are multiple tiddlers with the same title in different bags then the one from the highest priority bag will be used as the recipe tiddler</li><li>Wikis are composed by splicing the tiddlers from the corresponding recipe into the standard TW5 HTML template</li></ol><p>A very simple example of the recipe/bag model might be for a single user who maintains the following bags:</p><ul><li><strong>recipes</strong> - tiddlers related to cooking recipes</li><li><strong>work</strong> - tiddlers related to work</li><li><strong>app</strong> - common tiddlers for customising TiddlyWiki</li></ul><p>Those bags would be used with the following recipes:</p><ul><li><strong>recipes</strong> –&gt; recipes, app - wiki for working with recipes, with common custom components</li><li><strong>work</strong> –&gt; work, app - wiki for working with work, with common custom components</li><li><strong>app</strong> –&gt; app - wiki for maintaining custom components</li></ul><p>All of this will work dynamically, so changes to the app bag will instantly ripple into the affected hosted wikis.</p><p>A more complex example might be for a teacher working with a group of students:</p><ul><li><strong>student-{name}</strong> bag for each students work</li><li><strong>teacher-course</strong> bag for the coursework, editable by the teacher</li><li><strong>teacher-tools</strong> bag for custom tools used by the teacher</li></ul><p>Those bags would be exposed through the following hosted wikis:</p><ul><li><strong>student-{name}</strong> hosted wiki for each students work, including the coursework material</li><li><strong>teacher-course</strong> hosted wiki for the coursework, editable by the teacher</li><li><strong>teacher</strong> hosted wiki for the teacher, bringing together all the bags, giving them an overview of all the students work</li></ul></div>
@@ -3575,7 +3486,7 @@ html body.tc-body .tc-btn-rounded svg {
 </div></div>
 </div>
 </a><a name="Checklists and Features">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Checklists and Features" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Checklists and Features</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">5th May 2025 at 2:54pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="Checklists and Features" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Checklists and Features</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 12:39am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
 <h2>ACL</h2>
 <ul>
 <li>Verify that anonymous users only have the access defined by allowAnon.
@@ -3594,17 +3505,13 @@ html body.tc-body .tc-btn-rounded svg {
 <li>Verify that all admin permissions are based on the admin role, not the first user.</li>
 <li>Verify that admin's cannot remove the admin role from themselves.</li>
 </ul>
-<h2>Recipes</h2>
-<ul>
-<li></li>
-</ul>
 </div></div>
 </div>
 </a><a name="Client Plugins">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Client Plugins" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Client Plugins</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th May 2025 at 8:55pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Client Plugins" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Client Plugins</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 12:45am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
 <p><a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="#Client%20Plugins">Client Plugins</a> are normal <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="#TiddlyWiki">TiddlyWiki</a> plugins. They are cached on the server and served directly to the client as needed. <a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="#Server%20Plugins">Server Plugins</a>, perhaps acting as third-party plugin libraries, may register additional <a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="#Client%20Plugins">Client Plugins</a> and either add them to the cache immediately (if it's some small built-in plugin) or only when a recipe requires them (like a plugin library would).
 </p>
-<p>On startup, all server plugins are called to generate their client plugins. The client plugins are saved in <code class="_codified_">cache/${path}/plugin.json</code>, using a relative path of the plugin's choosing. The same thing happens when a recipe's list of plugins changes. Plugins do not have to be generated fresh each time if the server plugin has a way of verifying that all of its client plugins are up to date on the file system, perhaps by reading and hashing them.
+<p>On startup, all server plugins are called to generate their client plugins. The client plugins are saved in <code class="_codified_">cache/${path}/plugin.*</code>, using a relative path of the plugin's choosing. The same thing happens when a recipe's list of plugins changes.
 </p>
 <p>The wiki index file itself is also rendered with an empty store and saved at <code class="_codified_">cache/tiddlywiki5.html</code>.
 </p>
@@ -3620,29 +3527,30 @@ MultiWikiServer is a new development that drastically improves TiddlyWiki's capa
 </p></div>
 </div>
 </a><a name="HTTP API">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="HTTP API" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">HTTP API</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">28th April 2025 at 3:26pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="HTTP API" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">HTTP API</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 12:36am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
 <p>The MultiWikiServer HTTP API provides management and tiddler endpoints.
 </p>
 <p>The design goals of the API are:
 </p>
 <ul>
 <li>Connect the client and server as transparently as possible.</li>
-<li>Be easy to understand and use via Javascript.</li>
+<li>Be easy to understand and use via JavaScript.</li>
 <li>Have strict validation of incoming requests.</li>
 </ul>
 <h2>Management</h2>
 <ul>
 <li>On the client, most request paths are defined by a single adaptor function which accepts the input for the server and returns a promise which resolves to the server's parsed response.</li>
 <li>The server may throw a user error (or a string), which is expected to return to the client. It should give them an actionable understanding of what went wrong.</li>
-<li>The API essentially forwards a function call from the client to the server, using <code class="_codified_">fetch</code>. It expects a Javascript client, and is not intended to support form submissions directly.</li>
 </ul>
 <h2>Tiddler</h2>
-<p>The tiddler API was based on <a class="tc-tiddlylink-external _codified_" href="https://tank.peermore.com/tanks/tiddlyweb/HTTP%20API" rel="noopener noreferrer" target="_blank">the API of TiddlyWeb</a>, first developed in 2008 by Chris Dent, but is more oriented around JSON and Typescript. The concept of resources remains and in the future it will hopefully be adapted to serve static versions of tiddlers.
+<p>The tiddler API was based on <a class="tc-tiddlylink-external _codified_" href="https://tank.peermore.com/tanks/tiddlyweb/HTTP%20API" rel="noopener noreferrer" target="_blank">the API of TiddlyWeb</a>, first developed in 2008 by Chris Dent, but is more oriented around JSON and Typescript.
+</p>
+<p>The concept of resources is central to the API and in the future it will hopefully be adapted to serve static versions of tiddlers.
 </p>
 </div></div>
 </div>
 </a><a name="Installation">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-TableOfContents" data-tags="TableOfContents" data-tiddler-title="Installation" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Installation</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">12th June 2025 at 10:30pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="TableOfContents"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">TableOfContents</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p>These instructions require minimal knowledge of the terminal and require NodeJS to be installed.</p><ol><li>Open a terminal window and set the current directory to the folder you want to create the project folder in. </li><li>The init command creates the project folder and installs the required dependencies and config files. You can change the name to whatever you like. <div>
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-TableOfContents" data-tags="TableOfContents" data-tiddler-title="Installation" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Installation</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">12th June 2025 at 11:57pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="TableOfContents"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">TableOfContents</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p>These instructions require minimal knowledge of the terminal and require NodeJS to be installed.</p><ol><li>Open a terminal window and set the current directory to the folder you want to create the project folder in. </li><li>The init command creates the project folder and installs the required dependencies and config files. You can change the name to whatever you like. <div>
 <div style="position:relative;"><div style="position:absolute;bottom:0;right:0;"><button class="tc-btn-invisible" title="Copy this text to the clipboard"><svg class="tc-image-copy-clipboard tc-image-button" height="22pt" viewBox="0 0 128 128" width="22pt"><g fill-rule="evenodd"><rect height="8" rx="4" width="33" x="40" y="40"></rect><rect height="8" rx="4" width="17" x="40" y="82"></rect><rect height="8" rx="4" width="17" x="40" y="54"></rect><rect height="8" rx="4" width="33" x="40" y="96"></rect><rect height="8" rx="4" width="12" x="40" y="68"></rect><path d="M40 16H24c-4.419 0-8 3.59-8 8a8.031 8.031 0 000 .01v95.98a8.03 8.03 0 000 .01c0 4.41 3.581 8 8 8h80a7.975 7.975 0 005.652-2.34 7.958 7.958 0 002.348-5.652v-16.016c0-4.414-3.582-7.992-8-7.992-4.41 0-8 3.578-8 7.992V112H32V32h64v8.008C96 44.422 99.582 48 104 48c4.41 0 8-3.578 8-7.992V23.992a7.963 7.963 0 00-2.343-5.651A7.995 7.995 0 00104.001 16H88c0-4.41-3.585-8-8.007-8H48.007C43.588 8 40 11.582 40 16zm4-1.004A4.001 4.001 0 0148 11h32c2.21 0 4 1.797 4 3.996v4.008A4.001 4.001 0 0180 23H48c-2.21 0-4-1.797-4-3.996v-4.008z"></path><rect height="16" rx="8" width="66" x="62" y="64"></rect><path d="M84.657 82.343l-16-16v11.314l16-16a8 8 0 10-11.314-11.314l-16 16a8 8 0 000 11.314l16 16a8 8 0 1011.314-11.314z"></path></g></svg><span class="tc-tiny-gap-left">copy to clipboard</span></button></div></div>
 <pre><code>npm init @tiddlywiki/mws@latest "new_folder_name" </code></pre>
 </div></li><li>Set the current directory to the project folder that was just created: <div>
@@ -3660,44 +3568,7 @@ MultiWikiServer is a new development that drastically improves TiddlyWiki's capa
 </div></li><li>Start the server. On startup, MWS checks the database schema and updates it automatically if there are changes. Normally this works just fine, but it can fail, which is why it's important to save a backup first. <div>
 <div style="position:relative;"><div style="position:absolute;bottom:0;right:0;"><button class="tc-btn-invisible" title="Copy this text to the clipboard"><svg class="tc-image-copy-clipboard tc-image-button" height="22pt" viewBox="0 0 128 128" width="22pt"><g fill-rule="evenodd"><rect height="8" rx="4" width="33" x="40" y="40"></rect><rect height="8" rx="4" width="17" x="40" y="82"></rect><rect height="8" rx="4" width="17" x="40" y="54"></rect><rect height="8" rx="4" width="33" x="40" y="96"></rect><rect height="8" rx="4" width="12" x="40" y="68"></rect><path d="M40 16H24c-4.419 0-8 3.59-8 8a8.031 8.031 0 000 .01v95.98a8.03 8.03 0 000 .01c0 4.41 3.581 8 8 8h80a7.975 7.975 0 005.652-2.34 7.958 7.958 0 002.348-5.652v-16.016c0-4.414-3.582-7.992-8-7.992-4.41 0-8 3.578-8 7.992V112H32V32h64v8.008C96 44.422 99.582 48 104 48c4.41 0 8-3.578 8-7.992V23.992a7.963 7.963 0 00-2.343-5.651A7.995 7.995 0 00104.001 16H88c0-4.41-3.585-8-8.007-8H48.007C43.588 8 40 11.582 40 16zm4-1.004A4.001 4.001 0 0148 11h32c2.21 0 4 1.797 4 3.996v4.008A4.001 4.001 0 0180 23H48c-2.21 0-4-1.797-4-3.996v-4.008z"></path><rect height="16" rx="8" width="66" x="62" y="64"></rect><path d="M84.657 82.343l-16-16v11.314l16-16a8 8 0 10-11.314-11.314l-16 16a8 8 0 000 11.314l16 16a8 8 0 1011.314-11.314z"></path></g></svg><span class="tc-tiny-gap-left">copy to clipboard</span></button></div></div>
 <pre><code>npm start</code></pre>
-</div></li></ol><h3 class="">Git repo</h3><p>It is optionally recommended to save a history of your project configuration using git. </p><ul><li>On Windows you can use <a class="tc-tiddlylink-external" href="https://github.com/apps/desktop" rel="noopener noreferrer" target="_blank">GitHub Desktop</a>. </li><li>On Linux, git is usually preinstalled or available via the default package manager for your distro. </li></ul><p>You probably want to add the <code>store</code> and <code>cache</code> folders to <code>.gitignore</code>. </p></div>
-</div>
-</a><a name="Moduler Design">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Moduler Design" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Moduler Design</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">28th April 2025 at 2:33pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<h3>Sessions and Login</h3>
-<ul>
-<li><code class="_codified_">GET /login</code> and <code class="_codified_">POST /logout</code></li>
-<li>parse incoming requests and provide AuthUser</li>
-</ul>
-<h3>Users and Roles</h3>
-<ul>
-<li>the user management UI</li>
-<li>provide lists for other features
-<ul>
-<li>the list of roles <code class="_codified_">[name, description]</code></li>
-<li>the list of users <code class="_codified_">[id, username]</code></li>
-</ul>
-</li>
-</ul>
-<h3>Recipes and Bags (+ACL)</h3>
-<ul>
-<li>manage recipes and bags</li>
-<li>manage the acl for them</li>
-<li>manage available plugins</li>
-<li>provide acl assertion checks for services to use</li>
-</ul>
-<h3>Router and Transport</h3>
-<ul>
-<li>Maps route definitions into service handlers</li>
-<li>HTTP, Websockets</li>
-</ul>
-<h3>Database Connector</h3>
-<ul>
-<li>Prisma handles query translation (wasm or native addon)</li>
-<li>Prisma supports custom adapters, and also provides standard ones</li>
-<li>Connector classes in MWS take care of database setup and schema updates</li>
-</ul>
-</div></div>
+</div></li></ol><h3 class="">Git repo</h3><p>It is recommended to save a history of your project configuration using git, </p><ul><li>On Windows you can use <a class="tc-tiddlylink-external" href="https://github.com/apps/desktop" rel="noopener noreferrer" target="_blank">GitHub Desktop</a>. </li><li>On Linux, git is usually preinstalled or available via the default package manager for your distro. </li></ul></div>
 </div>
 </a><a name="Multi-user Trust">
 <div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Security" data-tags="Security" data-tiddler-title="Multi-user Trust" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Multi-user Trust</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">28th May 2025 at 8:21pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Security"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Security</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
@@ -3795,80 +3666,81 @@ MultiWikiServer is a new development that drastically improves TiddlyWiki's capa
 </div></div>
 </div>
 </a><a name="Request Handling">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Request Handling" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Request Handling</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">1st June 2025 at 10:09am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<p>The Router class has the following methods which constitute the request chain.
-</p>
-<h2><code class="_codified_">handle</code></h2>
-<p>Takes the incoming request, response, and listener options, and calls the <code class="_codified_">handleRequest</code> function, adding a catch handler for rejected promises. This is the start of the async request chain. Any rejected promise from here on will make it's way back here if not caught anywhere else. If the Error is the <code class="_codified_">STREAM_ENDED</code> symbol, the handler simply ignores it, which is an easy way to signal that the request was handled and halt further processing.
-</p>
-<p>The <code class="_codified_">STREAM_ENDED</code> symbol is usually used by returning or throwing the result of <code class="_codified_">state.send*</code> methods, which have code equivalent to the following.
-</p>
-<pre><code>class State {
-  sendEmpty(status, headers){
-    this.res.writeHead(status, headers);
-    return this.end();
-  }
-  end(){
-    this.res.end();
-    return STREAM_ENDED;
-  }
-}
-</code></pre>
-<h2><code class="_codified_">handleRequest</code></h2>
-<p>Calls connect-style middleware for all requests
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Request Handling" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Request Handling</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 1:22am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<ol>
+<li>
+<p><strong>Entry Point</strong>: <code class="_codified_">Router.handle()</code>
 </p>
 <ul>
-<li>helmet</li>
+<li>Takes HTTP/HTTP2 request and response objects</li>
+<li>Wraps <code class="_codified_">handleRequest()</code> in error handling</li>
 </ul>
-<p>Creates the streamer
-</p>
-<p>Calls <code class="_codified_">handleStreamer</code>, adding a catch handler with <code class="_codified_">streamer.catcher</code>
-</p>
-<h2><code class="_codified_">new Streamer</code></h2>
-<p>The streamer hides the difference between HTTP/1.1 and HTTP/2.
+</li>
+<li>
+<p><strong>Main Request Processing</strong>: <code class="_codified_">Router.handleRequest()</code>
 </p>
 <ul>
-<li>Parse the URL and request headers.</li>
-<li>If this listener has a path prefix, remove it from the URL.</li>
-<li>set the host header from the <code class="_codified_">:authority</code> header if HTTP/2.</li>
-<li>Parse cookies</li>
-<li>Setup the compression stream. This is modified from the compression package and returns a compression stream or a PassThrough stream if no compression is used, instead of modifying the response object. It determines the compression to use based on <code class="_codified_">accept-encoding</code>, but if a <code class="_codified_">content-encoding</code> header is already set it just passes the response through, assuming it is already in the desired encoding.</li>
+<li>Emit middleware event</li>
+<li>Apply Helmet middleware</li>
+<li>Create Streamer instance</li>
+<li>Call <code class="_codified_">handleStreamer()</code></li>
 </ul>
-<h2><code class="_codified_">handleStreamer</code></h2>
+</li>
+<li>
+<p><strong>Stream Processing</strong>: <code class="_codified_">Router.handleStreamer()</code>
+</p>
 <ul>
-<li>Enforce the <code class="_codified_">x-requested-with</code> header if the request isn't a GET, HEAD, or OPTIONS request.</li>
-<li>Gets the auth details from the session manager</li>
-<li>Calculates the route for this request. Think of the route as the path through the tree of route handlers. Each handler may have child routes which get called after it. Each level in the tree can handle the request entirely or defer to child routes. If any level sends headers, the child level will not be called.</li>
-<li>Receives the body in the format specified by the route</li>
-<li>Calls <code class="_codified_">handleRoute</code></li>
+<li>Emits streamer event</li>
+<li>Finds matching route using <code class="_codified_">findRoute()</code></li>
+<li>Performs security checks (CSRF protection)</li>
+<li>Processes request body based on <code class="_codified_">bodyFormat</code></li>
+<li>Creates <code class="_codified_">ServerRequest</code> instance</li>
+<li>Calls <code class="_codified_">handleRoute()</code></li>
 </ul>
-<h2><code class="_codified_">handleRoute</code></h2>
-<p>Awaits each handler in the route in turn, returning if one of them sends headers.
+</li>
+<li>
+<p><strong>Route Matching</strong>: <code class="_codified_">Router.findRoute()</code> and <code class="_codified_">findRouteRecursive()</code>
 </p>
-<p>If none of them sent headers, send a 404 response.
+<ul>
+<li>Recursively matches URL path against defined routes</li>
+<li>Handles nested routes</li>
+<li>Matches HTTP methods</li>
+<li>Returns array of matched route segments</li>
+</ul>
+</li>
+<li>
+<p><strong>Route Handling</strong>: <code class="_codified_">Router.handleRoute()</code>
 </p>
-</div></div>
-</div>
-</a><a name="Request Server">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Request Server" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Request Server</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">22nd April 2025 at 11:30pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<p>This is more or less a reference on the design philosophy.
+<ul>
+<li>Executes handlers for matched routes in sequence</li>
+<li>Emits handle event</li>
+<li>Falls back to 404 if no handler sends response</li>
+</ul>
+</li>
+</ol>
+<h2>Body Format Processing</h2>
+<p>The router supports multiple body formats:
 </p>
-<h2>HTTP request path</h2>
-<p>The server comprises several classes which handle various parts of the request path.
+<ul>
+<li><code class="_codified_">stream</code>: Raw streaming data</li>
+<li><code class="_codified_">string</code>: UTF-8 string</li>
+<li><code class="_codified_">json</code>: Parsed JSON data</li>
+<li><code class="_codified_">buffer</code>: Raw buffer</li>
+<li><code class="_codified_">www-form-urlencoded</code>: Parsed form data as object</li>
+<li><code class="_codified_">www-form-urlencoded-urlsearchparams</code>: Form data as URLSearchParams</li>
+<li><code class="_codified_">ignore</code>: Ignores request body (default for GET/HEAD)</li>
+</ul>
+<h2>Security Features</h2>
+<ul>
+<li>Built-in Helmet middleware for security headers</li>
+<li>CSRF protection via <code class="_codified_">x-requested-with</code> header checks</li>
+<li>JSON security parsing (protects against prototype pollution)</li>
+<li>Method matching validation</li>
+<li>Path validation</li>
+</ul>
+<p>The routes are hierarchical, allowing for nested routes with inherited properties and progressive URL path matching.
 </p>
-<p>The Listener classes call the Router class with incoming requests. The Router class starts an async (Promise-based) code path with a catch handler protecting it.
-</p>
-<p>There are two kinds of classes, routing and state.
-</p>
-<p>Routing classes hold config state for that part of the request path. They are used to reach a specific objective. Examples include the Router and Authentication classes.
-</p>
-<p>State classes hold information specific to each request. It may be used by any of the routing classes. The primary goal is usually to hide implementation details, or to pass information between routing classes. The StateObject class is the primary example, but modules may have their own state classes.
-</p>
-<p>Both kinds of classes should check incoming information thoroughly and throw quickly if anything is wrong. The constructors of state classes are part of the request chain and may throw as well.
-</p>
-<p>The request may be completed at any point in the request chain by throwing the STREAM_ENDED symbol. The catch all handler will ignore the symbol, but will send an error 500 if headers are not marked as sent at that point.
-</p>
-<p>It is important that the entire request be awaited and eventually resolve or reject. A promise should never be left hanging. The Router class takes care of making sure every request has finished with some response, but if the promise never resolves or rejects, there is no way to do this.
+<p>It is important that the entire request path be awaited and eventually resolve or reject. A promise should never be left hanging. The Router class takes care of making sure every request has finished with some response, but if the promise never resolves or rejects, the request will eventually time out.
 </p>
 </div></div>
 </div>
@@ -4118,8 +3990,8 @@ MultiWikiServer is a new development that drastically improves TiddlyWiki's capa
 <div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-TableOfContents" data-tags="TableOfContents" data-tiddler-title="Usage" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Usage</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">12th June 2025 at 10:31pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="TableOfContents"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">TableOfContents</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p>Once MWS is successfully <a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Installation">installed</a>, you can access it by visiting <a class="tc-tiddlylink-external" href="http://localhost:8080" rel="noopener noreferrer" target="_blank">http://localhost:8080</a> in a browser on the same computer.</p><p>On first start, a default user is created with username <code>admin</code> and password <code>1234</code>. However, also by default, the server is only accessible to browsers on the same machine.</p><p>If you intend to make an MWS installation available on the Internet, the server should first be secured with the following steps:</p><ul><li>Change the administrator password</li><li>Install HTTPS server certificates from an online certificate service like <a class="tc-tiddlylink-external" href="https://letsencrypt.org/" rel="noopener noreferrer" target="_blank">Let's Encrypt</a>.</li></ul></div>
 </div>
 </a><a name="x-mws-tiddler">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="x-mws-tiddler" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">x-mws-tiddler</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">19th May 2025 at 9:51pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<p>The .tid file format does not support field names with colons.  Rather than trying to catch all the unsupported variations that may appear, we'll just use JSON to send it across the wire, since that is the official fallback format anyway. However, parsing a huge string value inside a JSON object is very slow, so we split off the text field and just send it after the other fields.
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Reference" data-tags="Reference" data-tiddler-title="x-mws-tiddler" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">x-mws-tiddler</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">13th June 2025 at 12:42am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Reference"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Reference</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>The .tid file format does not support field names with colons.  Rather than trying to catch all the unsupported variations that may appear, we'll just use JSON to send it across the wire, since that is the official fallback format in TW5. However, parsing a huge string value inside a JSON object is very slow, so we split off the text field and just send it after the other fields.
 </p>
 <pre><code>{ "title": "New Tiddler" }
 
@@ -4147,7 +4019,7 @@ if(splitter === -1) {
   }
 }
 </code></pre>
-<p>There may be edge cases I'm not aware of, but since it's literally just sending strings via XHR to NodeJS, there shouldn't be any problems.
+<p>There may be edge cases I'm not aware of, but since it's literally just sending strings to NodeJS, there shouldn't be any problems. Text fields are expected to be strings and binary types are base64-encoded.
 </p>
 </div></div>
 </div>
