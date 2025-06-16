@@ -55,27 +55,135 @@
 <p><code class="_codified_">RoutesKeyMap</code> would have the keys of all the routes in the class, and the type makes sure no routes have been missed, while also allowing the class to have extra properties that are not routes.
 </p>
 <h2><code class="_codified_">zodRoute</code></h2>
+<p>The <code class="_codified_">zodRoute</code> function creates type-safe route definitions with Zod validation. It takes a single configuration object with the following properties:
+</p>
 <dl>
-<dt><code class="_codified_">method</code></dt>
-<dd>A subset of the <a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="Allowed%2520Methods.html">Allowed Methods</a>.</dd>
-<dt><code class="_codified_">path</code></dt>
-<dd>A slash-separated string of folders including variables prefixed with a <code class="_codified_">:</code></dd>
-<dd><code class="_codified_">"path/to/route/:var/route/:var2"</code></dd>
-<dt><code class="_codified_">zodPathParams</code> - zod check on <code class="_codified_">state.pathParams</code></dt>
-<dd>A <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="Zod%2520Callback.html">Zod Callback</a> which returns an object with keys the same as the <code class="_codified_">path</code> variables, and values being the zod check for that specific variable. If this fails, the server will return a <code class="_codified_">404 NOT FOUND</code> response.</dd>
-<dt><code class="_codified_">bodyFormat</code></dt>
-<dd>The body format which the request wishes to receive. If the method is only GET and HEAD, this is ignored, as no request body is expected.</dd>
-<dt><code class="_codified_">zodRequest</code> - zod check on <code class="_codified_">state.data</code></dt>
-<dd>A <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="Zod%2520Callback.html">Zod Callback</a> which returns the expected shape of the request body after it is done being parsed. If this fails, the server will return a <code class="_codified_">400 INVALID</code> response.</dd>
-<dt><code class="_codified_">inner</code></dt>
-<dd>The handler, which receives a <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="StateObject.html">StateObject</a> instance with the generics set according to the above parameters. See also <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="ZodAssert.html">ZodAssert</a></dd>
+<dt><code class="_codified_">method: string[]</code></dt>
+<dd>An array of HTTP methods (e.g., <code class="_codified_">["GET", "POST"]</code>). Must be a subset of allowed methods.</dd>
+<dt><code class="_codified_">path: string</code></dt>
+<dd>A slash-separated string path with optional parameters prefixed with <code class="_codified_">:</code> (e.g., <code class="_codified_">"/recipes/:recipe_name/tiddlers/:title"</code>).</dd>
+<dt><code class="_codified_">bodyFormat: BodyFormat</code></dt>
+<dd>The expected body format: <code class="_codified_">"ignore"</code>, <code class="_codified_">"string"</code>, <code class="_codified_">"json"</code>, <code class="_codified_">"buffer"</code>, <code class="_codified_">"www-form-urlencoded"</code>, <code class="_codified_">"www-form-urlencoded-urlsearchparams"</code>, or <code class="_codified_">"stream"</code>. For GET and HEAD requests, this is always treated as <code class="_codified_">"ignore"</code>.</dd>
+<dt><code class="_codified_">zodPathParams: (z: Z2&lt;"STRING"&gt;) =&gt; Record&lt;string, ZodType&gt;</code></dt>
+<dd>A function that returns an object defining Zod validations for path parameters. The keys must match the parameter names in the path. If validation fails, returns 404.</dd>
+<dt><code class="_codified_">zodQueryParams?: (z: Z2&lt;"STRING"&gt;) =&gt; Record&lt;string, ZodType&gt;</code></dt>
+<dd>Optional function defining Zod validations for query parameters. Query params are arrays of strings by default.</dd>
+<dt><code class="_codified_">zodRequestBody?: (z: Z2&lt;BodyFormat&gt;) =&gt; ZodType</code></dt>
+<dd>Optional function defining Zod validation for the request body. Only valid for <code class="_codified_">"string"</code>, <code class="_codified_">"json"</code>, and <code class="_codified_">"www-form-urlencoded"</code> body formats. If validation fails, returns 400.</dd>
+<dt><code class="_codified_">securityChecks?: { requestedWithHeader?: boolean }</code></dt>
+<dd>Optional security checks. If <code class="_codified_">requestedWithHeader</code> is true, requires the <code class="_codified_">x-requested-with: fetch</code> header for non-GET/HEAD/OPTIONS requests.</dd>
+<dt><code class="_codified_">corsRequest?: (state: ZodState&lt;"OPTIONS", "ignore", P, Q, ZodUndefined&gt;) =&gt; Promise&lt;symbol&gt;</code></dt>
+<dd>Optional CORS preflight handler for OPTIONS requests. Cannot authenticate but can provide endpoint information.</dd>
+<dt><code class="_codified_">inner: (state: ZodState&lt;Method, BodyFormat, PathParams, QueryParams, RequestBody&gt;) =&gt; Promise&lt;JsonValue&gt;</code></dt>
+<dd>The main route handler that receives a fully validated and typed state object.</dd>
 </dl>
-<h2><code class="_codified_">zodManage</code></h2>
-<p><code class="_codified_">zodManage</code> is a shortcut for a specific use case of <code class="_codified_">zodRoute</code> which is used for the admin UI.
+<h3>Example</h3>
+<pre><code>const getUser = zodRoute({
+  method: ["GET"],
+  path: "/users/:user_id",
+  bodyFormat: "ignore",
+  zodPathParams: z =&gt; ({
+    user_id: z.string().uuid()
+  }),
+  zodQueryParams: z =&gt; ({
+    include_roles: z.enum(["yes", "no"]).array().optional()
+  }),
+  inner: async (state) =&gt; {
+    const { user_id } = state.pathParams; // typed as { user_id: string }
+    const { include_roles } = state.queryParams; // typed as { include_roles?: ("yes"|"no")[] }
+    
+    return await getUserById(user_id, include_roles?.[0] === "yes");
+  }
+});
+</code></pre>
+<h2><code class="_codified_">admin</code> Helper Function</h2>
+<p>The <code class="_codified_">admin</code> function is a convenience wrapper around <code class="_codified_">zodRoute</code> specifically for admin API endpoints. It automatically sets up:
 </p>
-<div style="color:rgb(212, 212, 212);background-color:rgb(30, 30, 30);font-family:&quot;font-size:15px;line-height:20px;white-space:pre;"><div>  <span style="color:#dcdcaa;">zodRoute</span>(</div><div>    [<span style="color:#ce9178;">"POST"</span>],</div><div>    <span style="color:#ce9178;">"/manager/$key"</span>,</div><div>    <span style="color:#9cdcfe;">z</span> <span style="color:#569cd6;">=&gt;</span> ({}),</div><div>    <span style="color:#ce9178;">"json"</span>,</div><div>    <span style="color:#dcdcaa;">zodRequest</span>,</div><div>    <span style="color:#569cd6;">async</span> <span style="color:#9cdcfe;">state</span> <span style="color:#569cd6;">=&gt;</span> {</div><div>      <span style="color:#c586c0;">return</span> <span style="color:#9cdcfe;">state</span>.<span style="color:#dcdcaa;">$transaction</span>(<span style="color:#569cd6;">async</span> (<span style="color:#9cdcfe;">prisma</span>) <span style="color:#569cd6;">=&gt;</span> <span style="color:#c586c0;">await</span> <span style="color:#dcdcaa;">inner</span>(<span style="color:#9cdcfe;">state</span>, <span style="color:#9cdcfe;">prisma</span>));</div><div>    }</div><div>  );</div></div>
-<p><code class="_codified_">$key</code> is a shortcut that refers to the key of the class the route is registered on. It is not a path param, so <code class="_codified_">zodPathParams</code> is empty.
+<ul>
+<li>Method: <code class="_codified_">["POST"]</code></li>
+<li>Path: <code class="_codified_">"/admin/$key"</code> (where <code class="_codified_">$key</code> is replaced with the property name)</li>
+<li>Body format: <code class="_codified_">"json"</code></li>
+<li>Security: Requires <code class="_codified_">x-requested-with: fetch</code> header</li>
+<li>Database transactions: Automatically wraps the handler in a Prisma transaction</li>
+<li>Authentication: Provides access to authenticated user state</li>
+</ul>
+<h3>Signature</h3>
+<pre><code>function admin&lt;T extends ZodTypeAny, R extends JsonValue&gt;(
+  zodRequest: (z: Z2&lt;"JSON"&gt;) =&gt; T,
+  inner: (state: ZodState&lt;"POST", "json", {}, {}, T&gt;, prisma: PrismaTxnClient) =&gt; Promise&lt;R&gt;
+): ZodRoute&lt;"POST", "json", {}, {}, T, R&gt;
+</code></pre>
+<h3>Parameters</h3>
+<dl>
+<dt><code class="_codified_">zodRequest: (z: Z2&lt;"JSON"&gt;) =&gt; ZodType</code></dt>
+<dd>Function defining the expected shape of the JSON request body.</dd>
+<dt><code class="_codified_">inner: (state, prisma) =&gt; Promise&lt;JsonValue&gt;</code></dt>
+<dd>Handler function that receives the validated state and a Prisma transaction client.</dd>
+</dl>
+<h3>Example</h3>
+<pre><code>const user_create = admin(z =&gt; z.object({
+  username: z.string().min(3),
+  email: z.string().email(),
+  role_id: z.string().uuid()
+}), async (state, prisma) =&gt; {
+  // state.data is typed based on the zodRequest schema
+  const { username, email, role_id } = state.data;
+  
+  // Create user within the automatic transaction
+  const user = await prisma.users.create({
+    data: { username, email, role_id }
+  });
+  
+  return { user_id: user.user_id, username, email };
+});
+</code></pre>
+<h2><code class="_codified_">registerZodRoutes</code> Function</h2>
+<p>This function registers multiple Zod routes from a class instance to a parent route. It's the bridge between route definitions and the actual router.
 </p>
+<h3>Signature</h3>
+<pre><code>function registerZodRoutes(
+  parent: ServerRoute,
+  router: object,
+  keys: string[]
+): void
+</code></pre>
+<h3>Parameters</h3>
+<dl>
+<dt><code class="_codified_">parent: ServerRoute</code></dt>
+<dd>The parent route to register child routes under.</dd>
+<dt><code class="_codified_">router: object</code></dt>
+<dd>An instance of a class containing route definitions as properties.</dd>
+<dt><code class="_codified_">keys: string[]</code></dt>
+<dd>Array of property names to register as routes. Usually <code class="_codified_">Object.keys(RouterKeyMap)</code>.</dd>
+</dl>
+<h3>Usage Pattern</h3>
+<pre><code>export class UserManager {
+  static defineRoutes(root: ServerRoute) {
+    registerZodRoutes(root, new UserManager(), Object.keys(UserKeyMap));
+  }
+
+  user_create = admin(z =&gt; z.object({
+    username: z.string(),
+    email: z.string().email()
+  }), async (state, prisma) =&gt; {
+    // Implementation
+  });
+
+  user_list = admin(z =&gt; z.undefined(), async (state, prisma) =&gt; {
+    // Implementation  
+  });
+}
+
+export const UserKeyMap: RouterKeyMap&lt;UserManager, true&gt; = {
+  user_create: true,
+  user_list: true,
+};
+
+// Register during server startup
+serverEvents.on("mws.routes", (root) =&gt; {
+  UserManager.defineRoutes(root);
+});
+</code></pre>
 </div></div>
 </div></p>
 </section>
