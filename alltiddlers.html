@@ -379,12 +379,16 @@ html button {
 	fill: var(--button-foreground);
 	background: var(--button-background);
 	border-color: var(--button-border);
+	cursor: pointer;
+}button:disabled {
+	cursor: default;
+	color: var(--muted-foreground);
 }button:disabled svg {
 	fill: var(--muted-foreground);
 }/*
 ** Basic element styles
 */html, body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", system-ui, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", sans-serif, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 	text-rendering: optimizeLegibility; /* Enables kerning and ligatures etc. */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
