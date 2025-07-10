@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.4.0-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>Code Layout: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://mws.tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://mws.tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture" data-tags="Architecture" data-tiddler-title="Code Layout" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Code Layout</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">10th July 2025 at 9:17pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>The MWS repo is divided into separate projects in the <code class="_codified_">packages</code> folder. The entry point is in <code class="_codified_">packages/mws/src/index.ts</code>. The entry point imports the <code class="_codified_">server</code>, <code class="_codified_">commander</code>, and <code class="_codified_">events</code> projects.
+</p>
+<p>The entire server uses Promises and async functions for pretty much everything. Synchronous file system calls should be avoided as much as possible.
+</p>
+<p>The <code class="_codified_">events</code> project is the foundation of MWS. It contains an <code class="_codified_">EventEmitter</code> instance that everything else subscribes to.
+</p>
+<p>Events are emitted asyncly. Event listeners are awaited with <code class="_codified_">Promise.all</code>, and rejections throw back to the event emit call. This is intentional because it is the heart of the entire server, not just a public event bus, and errors shouldn't be ignored. Errors that come from things like attempting to send SSE events to other clients, however, should not be thrown because they aren't relevent to the source of the event.
+</p>
+<p>There should be no singleton references other than the event emitter and event handlers should be as pure as possible, so that in theory it would be possible to run multiple completely separate MWS servers in the same process.
+</p>
+<p>The <code class="_codified_">commander</code> project handles the CLI parsing code. It exports a default function which MWS calls to execute the CLI. Commander emits several events during execution, which MWS hooks into to scaffold the rest of the server.
+</p>
+<p>It also exports the base class for commands to inherit from, and because it instantiates the commands, commands should not specify their own constructor. Additional instance properties may be added to commands in the <code class="_codified_">cli.execute.before</code> event.
+</p>
+<p>The <code class="_codified_">server</code> project handles all web related stuff, but in an MWS-agnostic way. It only requires the <code class="_codified_">events</code> project, so it could be used as the foundation for unrelated webservers. Its internal API is directly inspired by the TiddlyWiki server API, with routing and centralized handling of the request body.
+</p>
+<p>The <code class="_codified_">mws</code> project is the application layer of MWS and ties everything else together. It defines all the commands and web server routes and handles the database connection.
+</p>
+<p>The <code class="_codified_">react-admin</code> package is the Admin UI. It's based on react, and is built automatically when the dev server is enabled. You can find the server route in <code class="_codified_">packages/mws/src/services/setupDevServer.ts</code>
+</p>
+<h2>Events</h2>
+<p>If this all sounds a bit confusing, here are the events that are emitted on a normal startup.
+</p>
+<ul>
+<li><code class="_codified_">zod.make</code>  - Emitted by <code class="_codified_">server</code> to extend the zod global.</li>
+<li><code class="_codified_">cli.register</code>  - Emitted by <code class="_codified_">commander</code> to register commands.</li>
+<li><code class="_codified_">cli.commander</code> - Emitted by <code class="_codified_">commander</code> after routes are registered, but before help is printed.</li>
+<li><code class="_codified_">cli.execute.before</code> - Emitted by <code class="_codified_">commander</code> right before the command is executed. This allows adding properties to the command instance for use later in the application.</li>
+</ul>
+<p>These next ones are attachment points for further extension of MWS. They are emitted in the main <code class="_codified_">cli.execute.before</code> listener that MWS attaches.
+</p>
+<ul>
+<li><code class="_codified_">mws.cache.init.before</code></li>
+<li><code class="_codified_">mws.cache.init.after</code></li>
+<li><code class="_codified_">mws.adapter.init.before</code></li>
+<li><code class="_codified_">mws.adapter.init.after</code></li>
+<li><code class="_codified_">mws.config.init.before</code></li>
+<li><code class="_codified_">mws.config.init.after</code></li>
+</ul>
+<p>Next, these are emitted by the listen command, either by <code class="_codified_">mws</code> or by <code class="_codified_">server</code>.
+</p>
+<ul>
+<li><code class="_codified_">listen.router.init</code></li>
+<li><code class="_codified_">mws.router.init</code></li>
+<li><code class="_codified_">mws.routes.important</code></li>
+<li><code class="_codified_">mws.routes</code></li>
+<li><code class="_codified_">mws.routes.fallback</code></li>
+</ul>
+<p>And finally the event emitted after the command ends.
+</p>
+<ul>
+<li><code class="_codified_">cli.execute.after</code></li>
+</ul>
+<h2>Event nesting</h2>
+<p>Some of them are nested. For instance, if I log the event name when it is emitted, and then how long it took when it completes, this is the output (indented for clarity).
+</p>
+<pre><code>zod.make
+zod.make: 0.123ms
+
+cli.register
+cli.register: 0.088ms
+
+cli.commander
+cli.commander: 0.019ms
+
+cli.execute.before
+  mws.cache.init.before
+  mws.cache.init.before: 0.014ms
+  mws.cache.init.after
+  mws.cache.init.after: 0.013ms
+  mws.adapter.init.before
+  mws.adapter.init.before: 0.007ms
+  mws.adapter.init.after
+  mws.adapter.init.after: 0.006ms
+  mws.config.init.before
+  mws.config.init.before: 0.008ms
+  mws.config.init.after
+  mws.config.init.after: 0.009ms
+cli.execute.before: 1.171s
+
+listen.router.init
+  mws.router.init
+  mws.router.init: 0.012ms
+  mws.routes.important
+  mws.routes.important: 0.006ms
+  mws.routes
+  mws.routes: 2.754ms
+  mws.routes.fallback
+  mws.routes.fallback: 0.054ms
+listen.router.init: 4.002ms
+
+cli.execute.after
+cli.execute.after: 0.015ms
+</code></pre>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+
