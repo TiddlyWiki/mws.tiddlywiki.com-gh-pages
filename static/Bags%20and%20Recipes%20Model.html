@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.8-prerelease" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="static.css">
+<title>Bags and Recipes Model: TiddlyWiki MultiWikiServer — TiddlyWiki for the People</title>
+</head>
+<body class="tc-body">
+<p><div class="tc-static-alert"><div class="tc-static-alert-inner">This page is part of a static HTML representation of the TiddlyWiki at <a class="tc-tiddlylink-external" href="https://mws.tiddlywiki.com/" rel="noopener noreferrer" target="_blank">https://mws.tiddlywiki.com/</a></div></div>
+</p>
+<section class="tc-story-river tc-static-story-river">
+<p><div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists " data-tags="" data-tiddler-title="Bags and Recipes Model" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Bags and Recipes Model</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">18th July 2025 at 1:20am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>The bags and recipes model is a reference architecture for how tiddlers can be shared between multiple wikis. It was first introduced by TiddlyWeb in 2008.
+</p>
+<p>The principles of bags and recipes can be simply stated:
+</p>
+<ol>
+<li>Tiddlers are stored in named "bags"</li>
+<li>Bags have access controls that determines which users can read or write to them</li>
+<li>Recipes are named lists of bags, ordered from lowest priority to highest</li>
+<li>The tiddlers within a recipe are accumulated in turn from each bag in the recipe in order of increasing priority. Thus, if there are multiple tiddlers with the same title in different bags then the one from the highest priority bag will be used as the recipe tiddler</li>
+<li>Wikis are composed by splicing the tiddlers from the corresponding recipe into the standard TW5 HTML template</li>
+</ol>
+<p><a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="Bags%2520and%2520Recipes%2520Simple%2520Example.html">Bags and Recipes Simple Example</a>
+</p>
+<p><a class="tc-tiddlylink tc-tiddlylink-resolves _codified_" href="Bags%2520and%2520Recipes%2520Complex%2520Example.html">Bags and Recipes Complex Example</a>
+</p>
+</div></div>
+</div></p>
+</section>
+</body>
+</html>
+
