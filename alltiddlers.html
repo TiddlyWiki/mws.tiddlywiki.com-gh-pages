@@ -2761,7 +2761,7 @@ type: text/css
   /* --------------------------------------------------------------------- */
   /* Typography                                                            */
   /* --------------------------------------------------------------------- */
-  --foreground: var(--color-grey-900);
+  --foreground: var(--color-grey-800);
   /* text.primary */
   --muted-foreground: var(--color-grey-700);
   /* text.secondary */
@@ -3391,7 +3391,7 @@ html body.tc-body .tc-btn-rounded svg {
 </div>
 </a><a name="Architecture">
 <div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-TableOfContents" data-tags="TableOfContents" data-tiddler-title="Architecture" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Architecture</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">10th July 2025 at 9:17pm</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="TableOfContents"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">TableOfContents</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
-<p><p><ol class="tc-toc"><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Access%20Control"><span class="tc-toc-caption tc-tiny-gap-left">Access Control</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Client%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Client Plugins</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Code%20Layout"><span class="tc-toc-caption tc-tiny-gap-left">Code Layout</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#MWS%20and%20SQLite"><span class="tc-toc-caption tc-tiny-gap-left">MWS and SQLite</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Request%20Handling"><span class="tc-toc-caption tc-tiny-gap-left">Request Handling</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Server%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Server Plugins</span></a><ol class="tc-toc"></ol></li></ol></p></p>
+<p><p><ol class="tc-toc"><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Access%20Control"><span class="tc-toc-caption tc-tiny-gap-left">Access Control</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Client%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Client Plugins</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Code%20Layout"><span class="tc-toc-caption tc-tiny-gap-left">Code Layout</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#MWS%20and%20SQLite"><span class="tc-toc-caption tc-tiny-gap-left">MWS and SQLite</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Request%20Handling"><span class="tc-toc-caption tc-tiny-gap-left">Request Handling</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Server%20Plugins"><span class="tc-toc-caption tc-tiny-gap-left">Server Plugins</span></a><ol class="tc-toc"></ol></li><li class="toc-item"><a class="tc-tiddlylink tc-tiddlylink-resolves" href="#Server%20Routes"><span class="tc-toc-caption tc-tiny-gap-left">Server Routes</span></a><ol class="tc-toc"></ol></li></ol></p></p>
 </div></div>
 </div>
 </a><a name="Bag">
@@ -4173,6 +4173,70 @@ serverEvents.on("mws.routes", (root) =&gt; {
 </p>
 <p>The <a class="tc-tiddlylink tc-tiddlylink-missing _codified_" href="#Routing">MWS routing system</a> is directly borrowed from TiddlyWiki. Plugins may declare arbitrary routes (preferably namespaced) and the definitions try to be reasonably typed and have helpful utilities for handling incoming data.
 </p>
+</div></div>
+</div>
+</a><a name="Server Routes">
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-Architecture tc-tagged-Developers" data-tags="Architecture Developers" data-tiddler-title="Server Routes" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="more" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="More actions"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="Edit this tiddler" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="Edit this tiddler"></button><button aria-label="close" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="Close this tiddler"></button></span><span><h2 class="tc-title">Server Routes</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">1st September 2025 at 12:30am</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="Architecture"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-exists">Architecture</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span><span class="tc-tag-list-item" data-tag-title="Developers"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="fill:<<cssvar foreground>>;color:<<cssvar foreground>>;"><span class="tc-tag-missing">Developers</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="markdown">
+<p>The routing for the server uses the same concept of routes as the TiddlyWiki core server, but significantly enhanced with TypeScript types and request helpers and primitives, including request validation.
+</p>
+<h2>Server Routing</h2>
+<p>Routes are registered as a tree. The router starts at the root node and works its way down, using the regex and method of each route to check if the request matches. Once it finds a match, it recursively checks the children of those matches.
+</p>
+<ul>
+<li>The request method is "narrowed". Parent routes restrict the methods their child routes can accept.</li>
+</ul>
+<p>Once the full route is determined, it handles the request body based on the options of the matched route, then it calls each handler, starting with the root handler, and continuing down.
+</p>
+<ul>
+<li>The request body format is determined by the parent routes, and child routes cannot change the body format if a parent route sets it.</li>
+</ul>
+<p>In the example below, if the request matches child 2a, the router calls the root handler, then the child 2 handler, then the child 2a handler.
+</p>
+<hr>
+<p>[root]
+</p>
+<ul>
+<li>child 1
+<ul>
+<li>child 1a</li>
+</ul>
+</li>
+<li>child 2
+<ul>
+<li>child 2a</li>
+<li>child 2b</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>Server Route Definition</h2>
+<p>The type definitions for this interface contains comments with more details. Please see that for more info.
+</p>
+<ul>
+<li><strong>path</strong>: A regular expression (must start with <code class="_codified_">^</code> to match the start of the path)</li>
+<li><strong>pathParams</strong>: Keys for the Regex match params. The object is added to the request state.</li>
+<li><strong>method</strong>: Array of methods supported by this route.</li>
+<li><strong>bodyFormat</strong>: The desired body format for this route. Ignored if the parent also specifies a body format.</li>
+<li><strong>denyFinal</strong>: Parent routes can set this so the request is rejected if no child routes are matched.</li>
+<li><strong>securityChecks</strong>: additional security checks for the server to perform.
+<ul>
+<li><strong>requestedWithHeader</strong>: requires a custom <code class="_codified_">X-Requested-With</code> header to be set to one of the valid values (<code class="_codified_">fetch</code>, <code class="_codified_">XMLHttpRequest</code>, <code class="_codified_">TiddlyWiki</code>) in order to prevent form and <code class="_codified_">no-cors</code> requests.</li>
+</ul>
+</li>
+</ul>
+<h2>Request Validation</h2>
+<p>The <code class="_codified_">zodRoute</code> helper function implements validation checks and additional typing for the request object. See the comments and types in the <code class="_codified_">zodRoute</code> file for further information.
+</p>
+<p>The zod options accept a function which returns a zod schema (or a hashmap of keys to zod schemas).
+</p>
+<ul>
+<li><strong>zodPathParams</strong>: the path params object</li>
+<li><strong>zodQueryParams</strong>: the query params object</li>
+<li><strong>zodRequestBody</strong>: the request body</li>
+<li>The <strong>path</strong> is a string instead of a regex. The path is split on the <code class="_codified_">/</code> and names starting with a colon become path params.</li>
+<li>The <strong>method</strong>, <strong>body format</strong>, and <strong>security checks</strong> are same as above.</li>
+<li><strong>registerError</strong>: An error instance to capture a stack trace in case it's needed for any reason. Note that in most runtimes the performance penalty is incurred when the stack trace is read, not when the error instance is created.</li>
+</ul>
 </div></div>
 </div>
 </a><a name="Site Admin">
