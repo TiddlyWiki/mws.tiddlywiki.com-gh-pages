@@ -2227,16 +2227,12 @@ a.tc-tiddlylink:hover {
 	width: 3em;
 	height: 3em;
 	
--webkit-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-	-moz-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
 		filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
 
 }.tc-thumbnail-wrapper:hover .tc-thumbnail-icon svg,
 .tc-thumbnail-wrapper:hover .tc-thumbnail-icon img {
 	color: #fff;
 	
--webkit-filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
-	-moz-filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
 		filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
 
 }.tc-thumbnail-icon {
@@ -2555,8 +2551,6 @@ span.markdown {
 	margin-top: 6px;
 	margin-bottom: 12px;
 	
--webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
-	-moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
 		box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
 
 }@media (max-width: 960px) {
